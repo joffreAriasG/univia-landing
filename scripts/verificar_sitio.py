@@ -10,6 +10,8 @@ RAIZ = Path(__file__).resolve().parent.parent
 OPCIONALES = {"seguimiento.js"}  # del sitio original; si falta, la página funciona igual
 EXTERNOS = ("http://", "https://", "mailto:", "tel:", "data:", "javascript:", "#")
 REF = re.compile(r'(?:href|src|poster)="([^"]+)"|url\(["\']?([^"\')]+)["\']?\)')
+PROPIO = re.compile(r'https://(?:landing\.)?univiatech\.com/([^"\'\s<>?#]*)')  # URLs absolutas del propio sitio
+CANONICAL = re.compile(r'<link rel="canonical" href="https://[^/"]+/([^"]*)"')
 
 errores, avisos = [], []
 
@@ -34,6 +36,16 @@ def revisar(archivo: Path):
             (avisos if p.name in OPCIONALES else errores).append(f"{rel}: no existe {ref}")
     if archivo.suffix == ".html" and 'id="lead"' in texto and "lead.js" not in texto:
         errores.append(f"{rel}: tiene formulario pero no carga lead.js (los leads no llegan al CRM)")
+    if archivo.name == "index.html":
+        ruta = archivo.parent.relative_to(RAIZ).as_posix()
+        ruta = "" if ruta == "." else ruta + "/"
+        can = CANONICAL.search(texto)
+        if can and can.group(1) != ruta:
+            errores.append(f"{rel}: canonical apunta a /{can.group(1)} y la página es /{ruta}")
+        for u in sorted(set(PROPIO.findall(texto))):
+            p = RAIZ / unquote(u)
+            if not (p.is_file() or (p / "index.html").is_file()):
+                avisos.append(f"{rel}: URL absoluta a una ruta que no existe en el sitio: /{u}")
     if "[Completar" in texto:
         avisos.append(f"{rel}: tiene textos por completar ({texto.count('[Completar')})")
 
