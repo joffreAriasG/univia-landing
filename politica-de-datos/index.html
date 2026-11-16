@@ -13,11 +13,44 @@
 <meta name="robots" content="noindex,nofollow">
 </head>
 <body>
+<link rel="stylesheet" href="../assets/css/blog.css">
 <link rel="stylesheet" href="../assets/css/politica.css">
 
 
 <!-- REVISAR CON SU ASESOR LEGAL antes de publicar. Texto redactado según la LOPDP del Ecuador. -->
-<header class="top"><div class="wrap nav"><a class="logo" href="../" aria-label="Univia Tech, inicio"><span class="brand" role="img" aria-label="Univia Tech One System"></span></a><a class="btn btn-primary" href="../#contacto">Agenda una demo</a></div></header>
+<header class="top">
+  <div class="wrap nav">
+    <a class="logo" href="../" aria-label="Univia Tech, inicio"><span class="brand" role="img" aria-label="Univia Tech One System"></span></a>
+    <ul>
+      <li><a href="../plataforma/">Plataforma</a></li>
+      <li><a href="../#como">Cómo trabajamos</a></li>
+      <li><a href="../planes/">Planes</a></li>
+      <li><a href="../blog/">Blog</a></li>
+      <li><a href="../#preguntas">Preguntas</a></li>
+      <li><a href="../#contacto">Contacto</a></li>
+    </ul>
+    <div class="nav-right">
+      <a class="btn btn-primary" href="../#contacto">Agenda una demo</a>
+      <button type="button" class="burger" id="burger" aria-expanded="false" aria-controls="mobile-menu" aria-label="Abrir menú">
+        <svg class="bars" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <svg class="x" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+  </div>
+  <nav class="mobile-menu" id="mobile-menu" aria-label="Menú" hidden>
+    <div class="wrap">
+      <ul>
+        <li><a href="../plataforma/">Plataforma</a></li>
+        <li><a href="../#como">Cómo trabajamos</a></li>
+        <li><a href="../planes/">Planes</a></li>
+        <li><a href="../blog/">Blog</a></li>
+        <li><a href="../#preguntas">Preguntas</a></li>
+        <li><a href="../#contacto">Contacto</a></li>
+      </ul>
+      <a class="btn btn-primary" href="../#contacto">Agenda una demo</a>
+    </div>
+  </nav>
+</header>
 <main class="wrap legal">
   <nav class="crumbs" aria-label="Estás en"><ol><li><a href="../">Inicio</a></li><li aria-current="page">Protección de datos</li></ol></nav>
   <h1>Política de protección de datos personales</h1>
@@ -97,6 +130,7 @@
 </main>
 <footer><div class="wrap"><span class="brand" role="img" aria-label="Univia Tech One System"></span><div class="fcontact"><span>+593 99 981 3244 · patricia.segarra@univiatech.com</span><span>© 2026 Univia Tech® · Todo bajo control · Ecuador</span></div></div></footer>
 
+<script src="../assets/js/menu.js"></script>
 <script src="../seguimiento.js" defer></script>
 
 
