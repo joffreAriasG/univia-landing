@@ -7,6 +7,18 @@ Los leads del formulario van al CRM de QA (canal `landing-univia`) con `lead.js`
 con `sincronizar_landing.py`. Ese script ya no publica aquí: si los artefactos originales cambian, solo avisa, y
 lo que se quiera incorporar se trae a mano en una rama.
 
+## Repositorio público
+
+Este repositorio es **público** (decisión 2026-11-16): GitHub Pages lo publica gratis y su contenido es el mismo
+sitio que cualquiera ve en el navegador. Por eso aquí **no va**:
+
+- credenciales, tokens, llaves ni archivos `.env`;
+- lógica de negocio, integraciones o datos de clientes (eso vive en `app_univia_plataforma` y el ERP);
+- leads, exportaciones del CRM ni documentos internos.
+
+Los IDs de analítica (`seguimiento.js`) y la URL del ERP (`data-erp`) sí pueden estar: son públicos por naturaleza.
+Para commits, usa el correo noreply de GitHub en vez del personal.
+
 ## Estructura
 
 | Ruta | Qué es |
