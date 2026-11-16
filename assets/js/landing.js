@@ -205,10 +205,6 @@
       try{document.dispatchEvent(new CustomEvent('univia:lead',{detail:{fecha_demo:cita?cita.valor:'',consentimiento:new Date().toISOString(),origen:ORIGEN,via:via,plan:g('plan'),nombre:g('nombre'),empresa:g('empresa'),telefono:g('telefono'),correo:g('correo'),ciudad:g('ciudad'),mensaje:g('mensaje')}}));}catch(e){}
       if(via==='wa'){var w=window.open(url,'_blank','noopener');if(!w){var a=document.createElement('a');a.href=url;a.target='_blank';a.rel='noopener';document.body.appendChild(a);a.click();a.remove();}}
       else{window.location.href=url;}
-      if(!/claudeusercontent\.com$/.test(location.hostname)){
-        try{sessionStorage.setItem('univia-ultimo',JSON.stringify({via:via,url:url,msg:msg,cita:cita?cita.texto:''}));}catch(e){}
-        /* sin gracias.html */
-      }
       document.getElementById('copy-msg').onclick=function(){copiar(msg,'Mensaje copiado');};
     });
   }catch(e){show(e.message);}
