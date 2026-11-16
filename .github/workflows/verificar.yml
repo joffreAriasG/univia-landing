@@ -1,0 +1,21 @@
+# Revisa el sitio en cada pull request y en cada cambio a main.
+# Falla si verificar_sitio.py encuentra errores (enlaces rotos, archivos que faltan,
+# restos de claude.ai, formulario sin lead.js). Los avisos no la detienen.
+name: Verificar sitio
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  verificar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Revisar enlaces y archivos
+        run: python3 scripts/verificar_sitio.py
