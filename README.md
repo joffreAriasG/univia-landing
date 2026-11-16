@@ -27,6 +27,14 @@ viven en `assets/`, así que una funcionalidad nueva se programa una sola vez. L
 Datos de contacto y planes: al inicio de `assets/js/landing.js` (`CONTACTO`, `PLANES`).
 Horarios y feriados de la demo: al inicio de `assets/js/agenda.js` (`HORAS`, `DIAS`, `BLOQUEADOS`).
 
+## Cookies y medición
+
+`seguimiento.js` (raíz, lo cargan las 12 páginas) muestra el aviso de cookies, agrega el enlace "Cookies" al pie y
+carga Google Analytics 4, Tag Manager, Pixel de Meta y LinkedIn Insight **solo si la persona acepta**, como dice la
+política de datos. Los IDs van al inicio del archivo (`SEGUIMIENTO`); mientras estén vacíos no se carga nada ni
+aparece el aviso. Mide el envío del formulario (`generate_lead` / `Lead`) y los clics a WhatsApp (`contact`), sin
+datos personales y nunca en modo prueba.
+
 ## Probar el formulario
 
 El WhatsApp y el correo del formulario son los reales. Para probar sin escribirles, abre el sitio con
@@ -45,5 +53,4 @@ Dura toda la sesión del navegador; `?prueba=0` lo quita. Los botones sueltos de
 
 ## Pendientes conocidos
 
-- `seguimiento.js`: el blog, la política y los artículos lo cargan desde la raíz y no está en el repo (404 inofensivo).
 - `politica-de-datos/`: tiene 2 textos `[Completar: …]` (razón social y RUC, domicilio legal) visibles en la página.
