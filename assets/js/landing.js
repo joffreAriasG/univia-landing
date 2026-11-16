@@ -84,11 +84,6 @@
     renderPlanes();renderTabla();
 
 
-    /* Dentro del visor de Claude el blog vive en su propio enlace; en univiatech.com se usa blog/index.html */
-    var VISOR_BLOG="";
-    if(VISOR_BLOG && /claudeusercontent\.com$/.test(location.hostname)){
-      document.querySelectorAll('a[href^="blog/"]').forEach(function(a){a.href=VISOR_BLOG;a.target='_blank';a.rel='noopener';});
-    }
 
     /* ===== Menú del celular ===== */
     var burger=document.getElementById('burger'),mm=document.getElementById('mobile-menu');
