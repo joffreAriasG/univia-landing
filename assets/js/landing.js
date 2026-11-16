@@ -163,6 +163,22 @@
       var entrada=sessionStorage.getItem('univia-entrada')||'';
       ORIGEN=(location.pathname.split('/').filter(Boolean).pop()||'inicio')+(sessionStorage.getItem('univia-origen')?' · '+sessionStorage.getItem('univia-origen'):'')+(entrada&&entrada!==location.pathname?' · entrada='+entrada:'');
     }catch(e){}
+    /* Modo prueba: ?prueba=1 (dura la sesión; ?prueba=0 lo quita). No abre WhatsApp ni correo y el lead llega al CRM marcado como PRUEBA. */
+    var PRUEBA=false;
+    try{
+      var qp=new URLSearchParams(location.search).get('prueba');
+      if(qp==='1')sessionStorage.setItem('univia-prueba','1');
+      if(qp==='0')sessionStorage.removeItem('univia-prueba');
+      PRUEBA=sessionStorage.getItem('univia-prueba')==='1';
+    }catch(e){}
+    if(PRUEBA){
+      ORIGEN='PRUEBA · '+ORIGEN;
+      var avisoPrueba=document.createElement('div');
+      avisoPrueba.setAttribute('role','status');
+      avisoPrueba.textContent='Modo prueba: el formulario no abre WhatsApp ni correo y el lead llega al CRM marcado como PRUEBA. Para salir: ?prueba=0';
+      avisoPrueba.style.cssText='position:fixed;left:12px;bottom:12px;z-index:99;max-width:min(380px,calc(100vw - 24px));background:#a1281f;color:#fff;padding:10px 14px;border-radius:12px;font:500 .85rem/1.4 system-ui,sans-serif';
+      document.body.appendChild(avisoPrueba);
+    }
     form.querySelectorAll('button[type=submit]').forEach(function(b){b.addEventListener('click',function(){via=b.dataset.via;});});
     var KEY='univia-borrador';
     try{var guardado=JSON.parse(localStorage.getItem(KEY)||'{}');Object.keys(guardado).forEach(function(k){if(form.elements[k])form.elements[k].value=guardado[k];});}catch(e){}
@@ -200,10 +216,12 @@
       document.getElementById('result-text').textContent= via==='wa'
         ? 'Abrimos WhatsApp con tu mensaje listo. Solo falta que lo envíes desde ahí. Si no se abrió, copia el mensaje y escríbenos al '+CONTACTO.whatsappVisible+'.'
         : 'Abrimos tu correo con el mensaje listo. Solo falta que lo envíes. Si no se abrió, copia el mensaje y escríbenos a '+CONTACTO.correo+'.';
+      if(PRUEBA)document.getElementById('result-text').textContent='Modo prueba: no se abrió '+(via==='wa'?'WhatsApp':'el correo')+'. El lead se envió al CRM marcado como PRUEBA.';
       document.getElementById('result-msg').textContent=msg;
       res.hidden=false;
-      try{document.dispatchEvent(new CustomEvent('univia:lead',{detail:{fecha_demo:cita?cita.valor:'',consentimiento:new Date().toISOString(),origen:ORIGEN,via:via,plan:g('plan'),nombre:g('nombre'),empresa:g('empresa'),telefono:g('telefono'),correo:g('correo'),ciudad:g('ciudad'),mensaje:g('mensaje')}}));}catch(e){}
-      if(via==='wa'){var w=window.open(url,'_blank','noopener');if(!w){var a=document.createElement('a');a.href=url;a.target='_blank';a.rel='noopener';document.body.appendChild(a);a.click();a.remove();}}
+      try{document.dispatchEvent(new CustomEvent('univia:lead',{detail:{fecha_demo:cita?cita.valor:'',consentimiento:new Date().toISOString(),origen:ORIGEN,via:via,plan:g('plan'),nombre:g('nombre'),empresa:g('empresa'),telefono:g('telefono'),correo:g('correo'),ciudad:g('ciudad'),mensaje:(PRUEBA?'[PRUEBA] ':'')+g('mensaje')}}));}catch(e){}
+      if(PRUEBA){}
+      else if(via==='wa'){var w=window.open(url,'_blank','noopener');if(!w){var a=document.createElement('a');a.href=url;a.target='_blank';a.rel='noopener';document.body.appendChild(a);a.click();a.remove();}}
       else{window.location.href=url;}
       document.getElementById('copy-msg').onclick=function(){copiar(msg,'Mensaje copiado');};
     });

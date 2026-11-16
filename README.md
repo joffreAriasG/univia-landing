@@ -27,6 +27,14 @@ viven en `assets/`, así que una funcionalidad nueva se programa una sola vez. L
 Datos de contacto y planes: al inicio de `assets/js/landing.js` (`CONTACTO`, `PLANES`).
 Horarios y feriados de la demo: al inicio de `assets/js/agenda.js` (`HORAS`, `DIAS`, `BLOQUEADOS`).
 
+## Probar el formulario
+
+El WhatsApp y el correo del formulario son los reales. Para probar sin escribirles, abre el sitio con
+`?prueba=1` (ej. https://landing.univiatech.com/?prueba=1): aparece un aviso rojo, el formulario no abre
+WhatsApp ni el correo y el lead llega al CRM con origen `PRUEBA · …` y el mensaje con `[PRUEBA]`.
+Dura toda la sesión del navegador; `?prueba=0` lo quita. Los botones sueltos de WhatsApp siguen abriendo el chat real
+(no envían nada solos).
+
 ## Cómo hacer un cambio
 
 1. Crea una rama desde `main`: `git switch -c mi-cambio`.
