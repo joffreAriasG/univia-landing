@@ -18,7 +18,7 @@ lo que se quiera incorporar se trae a mano en una rama.
 | `assets/css/` | `landing.css` (inicio, plataforma, planes), `blog.css` + `articulo.css` / `blog-indice.css`, `politica.css` |
 | `assets/js/` | `agenda.js` (calendario de la demo), `landing.js` (planes, menú, videos, formulario), `articulo.js`, `blog.js` |
 | `media/` | Videos, portadas y logo (`logo-mask.png`, usado por todos los CSS) |
-| `scripts/verificar_sitio.py` | Revisión antes de publicar |
+| `scripts/verificar_sitio.py` | Revisión antes de publicar (también corre en cada PR) |
 
 Cada página es un `index.html` con su contenido y sus datos estructurados (JSON-LD); estilos y scripts comunes
 viven en `assets/`, así que una funcionalidad nueva se programa una sola vez. Las rutas son relativas
@@ -32,7 +32,8 @@ Horarios y feriados de la demo: al inicio de `assets/js/agenda.js` (`HORAS`, `DI
 1. Crea una rama desde `main`: `git switch -c mi-cambio`.
 2. Prueba en local: `python -m http.server 8000` y abre http://localhost:8000.
 3. Revisa: `python scripts/verificar_sitio.py` (debe terminar con `0 errores`).
-4. Abre un pull request hacia `main`. Al unirlo, GitHub Pages publica en 1-2 minutos.
+4. Abre un pull request hacia `main`. GitHub Actions corre el mismo verificador (`.github/workflows/verificar.yml`)
+   y marca el PR en rojo si hay errores. Al unirlo, GitHub Pages publica en 1-2 minutos.
 
 ## Pendientes conocidos
 
