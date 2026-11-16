@@ -126,7 +126,18 @@ header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:8;background
 .hero h1{font-size:clamp(2.1rem,7.5vw,4rem);font-weight:700;letter-spacing:-.03em;margin-top:14px}
 .hero h1 em{font-style:normal;background:linear-gradient(transparent 58%, var(--em-mark) 58%, var(--em-mark) 92%, transparent 92%);color:var(--accent-text);padding:0 .08em}
 .hero .lead{font-size:1.15rem;color:var(--muted);margin-top:20px;max-width:34em}
-.hero .ctas{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px}
+.hero .ctas{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px}
+.oferta{position:relative;display:flex;align-items:center;gap:18px;margin-top:26px;padding:16px 18px 16px 22px;border-radius:18px;background:#262626;color:#e9e5dc;text-decoration:none;max-width:560px;box-shadow:0 14px 34px rgba(38,38,38,.28);overflow:hidden;transition:transform .2s,box-shadow .2s}
+.oferta::before{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(245,255,134,.16) 50%,transparent 70%);transform:translateX(-100%);animation:brillo 3.2s ease-in-out 1s infinite}
+@keyframes brillo{0%{transform:translateX(-100%)}45%,100%{transform:translateX(100%)}}
+.oferta:hover{transform:translateY(-2px);box-shadow:0 18px 40px rgba(38,38,38,.35)}
+.oferta-num{position:relative;flex:none;font:700 clamp(2.6rem,6vw,3.4rem)/1 var(--f-display);color:#f5ff86;letter-spacing:-.03em}
+.oferta-txt{position:relative;display:grid;gap:4px;min-width:0}
+.oferta-txt strong{font-size:1.08rem;font-weight:600;color:#fff;line-height:1.25}
+.oferta-txt small{font-size:.88rem;color:#bfbfbd}
+.oferta-ir{position:relative;flex:none;margin-left:auto;background:#f5ff86;color:#262626;font:700 .9rem var(--f-body);padding:.6em 1em;border-radius:999px;white-space:nowrap}
+@media (prefers-reduced-motion:reduce){.oferta::before{animation:none}}
+@media (max-width:520px){.oferta{flex-wrap:wrap;gap:10px 14px;padding:16px}.oferta-ir{margin-left:0;flex:1 1 100%;text-align:center}}
 .hero .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:28px;padding:0;list-style:none}
 .hero .chips li{font:500 .8rem var(--f-body);padding:.4em .8em;border:1px solid var(--line);border-radius:999px;color:var(--muted)}
 @media (max-width:900px){.hero-grid{grid-template-columns:1fr;gap:40px}.hero{padding-block:48px}}
@@ -378,15 +389,16 @@ form.lead{padding:28px;border:1px solid var(--line);border-radius:18px;backgroun
 .hp-precio b{font:700 2.3rem/1.1 var(--f-display)}
 .hp-precio small{color:var(--muted);font-size:.92rem}
 .hc-nota{color:var(--muted);font-size:.9rem;margin-bottom:20px;flex:1}
-.conds{display:grid;grid-template-columns:1.25fr 1fr;gap:20px 48px;margin-top:20px;padding:26px;border-radius:var(--r);border:1px solid var(--line)}
-.conds h3{font-size:1rem;font-weight:600;margin-bottom:10px}
-.conds ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:8px 20px;font-size:.93rem}
-.conds li{position:relative;padding-left:20px}
-.conds li::before{content:"✓";position:absolute;left:0;font-weight:700}
-.conds-letra{display:grid;gap:12px;align-content:start;font-size:.86rem;color:var(--muted)}
-.conds-letra strong{color:var(--ink);font-weight:600}
-@media (max-width:860px){.hours{grid-template-columns:1fr;gap:18px}.conds{grid-template-columns:1fr}}
-@media (max-width:520px){.conds ul{grid-template-columns:1fr}}
+.conds{margin-top:20px;padding:28px;border-radius:var(--r);border:1px solid var(--line);background:var(--surface)}
+.conds h3{font-size:1.15rem;font-weight:500;margin-bottom:18px}
+.conds ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:20px}
+.conds li{font-size:.93rem;line-height:1.4;font-weight:500}
+.conds li::before{content:"✓";display:grid;place-items:center;width:30px;height:30px;margin-bottom:10px;border-radius:50%;background:var(--accent);color:#262626;font-size:.9rem;font-weight:700}
+.conds-letra{display:grid;grid-template-columns:1fr 1fr;gap:16px 40px;margin-top:24px;padding-top:20px;border-top:1px solid var(--line)}
+.conds-letra p{font-size:.9rem;line-height:1.5;color:var(--muted)}
+.conds-letra strong{display:block;color:var(--ink);font-weight:600;margin-bottom:2px}
+@media (max-width:860px){.hours{grid-template-columns:1fr;gap:18px}.conds ul{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){.conds{padding:22px}.conds ul{grid-template-columns:1fr;gap:12px}.conds li{display:flex;align-items:center;gap:12px}.conds li::before{flex:none;margin:0}.conds-letra{grid-template-columns:1fr}}
 .form-note{grid-column:1/-1;font-size:.8rem;color:var(--muted)}
 .result{grid-column:1/-1;padding:16px;border-radius:12px;background:var(--bg);font-size:.92rem;display:grid;gap:10px}
 .result pre{margin:0;white-space:pre-wrap;font:400 .85rem var(--f-body);color:var(--muted);max-height:180px;overflow:auto}
@@ -412,7 +424,7 @@ footer .fcontact{display:grid;gap:4px;text-align:right;min-width:0;overflow-wrap
 
 
 
-<script type="application/ld+json" id="faq-ld">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Qué es Univia Tech y para qué tipo de empresa sirve?", "acceptedAnswer": {"@type": "Answer", "text": "Es un ERP: un solo sistema para llevar contabilidad, facturación electrónica, compras, ventas e inventario, pensado para pymes ecuatorianas. Va desde micro y pequeñas empresas hasta compañías en expansión o con procesos propios de su sector, como salud, educación o agricultura."}}, {"@type": "Question", "name": "¿Necesito saber de tecnología para usarlo?", "acceptedAnswer": {"@type": "Answer", "text": "No. Univia está diseñado para usarse sin ser experto en tecnología, y cada plan incluye horas de soporte y capacitación para tu equipo."}}, {"@type": "Question", "name": "¿Qué plan me conviene?", "acceptedAnswer": {"@type": "Answer", "text": "Start sirve si quieres ordenar lo básico: contabilidad, facturación, ATS, compras, ventas e inventario. Smart suma activos fijos, gestión de clientes y reportes en Power BI. Next agrega punto de venta, tienda virtual, manufactura, recursos humanos y nómina. One añade módulos por industria, proyectos e integraciones. Si tienes dudas, en la demo te decimos cuál se ajusta a tu operación."}}, {"@type": "Question", "name": "¿Se conecta con otros sistemas?", "acceptedAnswer": {"@type": "Answer", "text": "Sí. Smart incluye reportes en Power BI, Next incluye integración con botón de pagos y One incluye integraciones por API REST y webhooks con datos en tiempo real. Los desarrollos a medida y las integraciones complejas se revisan aparte."}}, {"@type": "Question", "name": "¿Puedo emitir facturas electrónicas con Univia?", "acceptedAnswer": {"@type": "Answer", "text": "Sí. La facturación electrónica viene incluida desde el plan Start y el sistema está alineado a la normativa ecuatoriana."}}, {"@type": "Question", "name": "¿Incluye el Anexo Transaccional (ATS)?", "acceptedAnswer": {"@type": "Answer", "text": "Sí, desde el plan Start, integrado con tu contabilidad, compras y ventas."}}, {"@type": "Question", "name": "¿Necesito firma electrónica?", "acceptedAnswer": {"@type": "Answer", "text": "Sí. Para emitir comprobantes electrónicos en Ecuador necesitas RUC activo y firma electrónica vigente, que se obtiene con una entidad de certificación autorizada. Te acompañamos para dejarla lista durante la implementación."}}, {"@type": "Question", "name": "¿Cuánto se demora la implementación?", "acceptedAnswer": {"@type": "Answer", "text": "Start, 5 días laborables. Smart, 45. Next, 75. One, 120."}}, {"@type": "Question", "name": "¿Cómo es el proceso?", "acceptedAnswer": {"@type": "Answer", "text": "Tiene tres pasos: analizamos tu operación, planificamos la solución según tus prioridades y luego implementamos, capacitamos a tu equipo y te seguimos acompañando."}}, {"@type": "Question", "name": "¿Puedo pasar mi información desde Excel o desde otro sistema?", "acceptedAnswer": {"@type": "Answer", "text": "En el diagnóstico revisamos qué información tienes, en qué estado está y definimos qué se carga y cómo. Ayuda mucho llegar con tus listados de clientes, proveedores y productos actualizados y sin duplicados."}}, {"@type": "Question", "name": "¿Cuánto cuesta?", "acceptedAnswer": {"@type": "Answer", "text": "Start cuesta $79,99 al mes, Smart $149,99, Next $274,99 y One $499,99. La implementación se paga una sola vez: $600, $1.500, $2.500 y $4.000, en ese mismo orden."}}, {"@type": "Question", "name": "¿Cómo se paga?", "acceptedAnswer": {"@type": "Answer", "text": "No somos un proveedor más, somos tus aliados estratégicos y buscamos la manera de adaptarnos a tu flujo de caja. La mensualidad se paga hasta el quinto día hábil de cada mes y, si pagas el año por anticipado, tienes descuento: 5 % en Start, 10 % en Smart, 12 % en Next y 15 % en One."}}, {"@type": "Question", "name": "¿Qué soporte incluye cada plan?", "acceptedAnswer": {"@type": "Answer", "text": "Soporte local antes, durante y después de implementar. Vienen incluidas 8 horas de soporte y capacitación en Start, 24 en Smart y 32 en Next y One."}}, {"@type": "Question", "name": "¿Y si necesito más horas de soporte?", "acceptedAnswer": {"@type": "Answer", "text": "La hora individual cuesta $40. También hay bolsas prepagadas: 50 horas a $36 cada una y 100 horas a $34 cada una. Tienes 1 año para usarlas desde la activación."}}, {"@type": "Question", "name": "¿Qué hacen con los datos que dejo en el formulario?", "acceptedAnswer": {"@type": "Answer", "text": "Los usamos solo para atender tu solicitud y darle seguimiento. No los vendemos. Todo el detalle está en nuestra Política de protección de datos."}}, {"@type": "Question", "name": "¿Puedo pedir que corrijan o borren mis datos?", "acceptedAnswer": {"@type": "Answer", "text": "Sí, y es gratis. Escríbenos a patricia.segarra@univiatech.com y te respondemos en máximo 10 días hábiles, como manda la Ley Orgánica de Protección de Datos Personales. También puedes retirar tu autorización cuando quieras, sin dar explicaciones."}}, {"@type": "Question", "name": "Si guardo datos de mis clientes en Univia, ¿quién responde por ellos?", "acceptedAnswer": {"@type": "Answer", "text": "Tu empresa decide para qué se usan esos datos, así que ante la ley es la responsable del tratamiento. Univia actúa como encargado: los trata solo para prestarte el servicio y según lo que acordemos en el contrato."}}, {"@type": "Question", "name": "¿La ley de protección de datos también aplica a las pymes?", "acceptedAnswer": {"@type": "Answer", "text": "Sí. La ley no exime a una empresa por ser pequeña: aplica a quien trate datos personales en Ecuador. Las multas se calculan sobre el volumen de negocio. Revisa tu caso con tu asesor legal; la autoridad encargada es la Superintendencia de Protección de Datos Personales."}}]}</script>
+<script type="application/ld+json" id="faq-ld">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Qué es Univia Tech y para qué tipo de empresa sirve?", "acceptedAnswer": {"@type": "Answer", "text": "Es un ERP: un solo sistema para llevar contabilidad, facturación electrónica, compras, ventas e inventario, pensado para pymes ecuatorianas. Va desde micro y pequeñas empresas hasta compañías en expansión o con procesos propios de su sector, como salud, educación o agricultura."}}, {"@type": "Question", "name": "¿Necesito saber de tecnología para usarlo?", "acceptedAnswer": {"@type": "Answer", "text": "No. Univia está diseñado para usarse sin ser experto en tecnología, y cada plan incluye horas de soporte y capacitación para tu equipo."}}, {"@type": "Question", "name": "¿Qué plan me conviene?", "acceptedAnswer": {"@type": "Answer", "text": "Start sirve si quieres ordenar lo básico: contabilidad, facturación, ATS, compras, ventas e inventario. Smart suma activos fijos, gestión de clientes y reportes en Power BI. Next agrega punto de venta, tienda virtual, manufactura, recursos humanos y nómina. One añade módulos por industria, proyectos e integraciones. Si tienes dudas, en la demo te decimos cuál se ajusta a tu operación."}}, {"@type": "Question", "name": "¿Se conecta con otros sistemas?", "acceptedAnswer": {"@type": "Answer", "text": "Sí. Smart incluye reportes en Power BI, Next incluye integración con botón de pagos y One incluye integraciones por API REST y webhooks con datos en tiempo real. Los desarrollos a medida y las integraciones complejas se revisan aparte."}}, {"@type": "Question", "name": "¿Puedo emitir facturas electrónicas con Univia?", "acceptedAnswer": {"@type": "Answer", "text": "Sí. La facturación electrónica viene incluida desde el plan Start y el sistema está alineado a la normativa ecuatoriana."}}, {"@type": "Question", "name": "¿Incluye el Anexo Transaccional (ATS)?", "acceptedAnswer": {"@type": "Answer", "text": "Sí, desde el plan Start, integrado con tu contabilidad, compras y ventas."}}, {"@type": "Question", "name": "¿Necesito firma electrónica?", "acceptedAnswer": {"@type": "Answer", "text": "Sí. Para emitir comprobantes electrónicos en Ecuador necesitas RUC activo y firma electrónica vigente, que se obtiene con una entidad de certificación autorizada. Te acompañamos para dejarla lista durante la implementación."}}, {"@type": "Question", "name": "¿Cuánto se demora la implementación?", "acceptedAnswer": {"@type": "Answer", "text": "Con Univia Start empiezas de inmediato. Smart toma 5 días laborables, Next 30 y One 60."}}, {"@type": "Question", "name": "¿Cómo es el proceso?", "acceptedAnswer": {"@type": "Answer", "text": "Tiene tres pasos: analizamos tu operación, planificamos la solución según tus prioridades y luego implementamos, capacitamos a tu equipo y te seguimos acompañando."}}, {"@type": "Question", "name": "¿Puedo pasar mi información desde Excel o desde otro sistema?", "acceptedAnswer": {"@type": "Answer", "text": "En el diagnóstico revisamos qué información tienes, en qué estado está y definimos qué se carga y cómo. Ayuda mucho llegar con tus listados de clientes, proveedores y productos actualizados y sin duplicados."}}, {"@type": "Question", "name": "¿Cuánto cuesta?", "acceptedAnswer": {"@type": "Answer", "text": "Start cuesta $79,99 al mes, Smart $149,99, Next $274,99 y One $499,99. Univia Start no tiene costo de implementación; en los demás se paga una sola vez: $500 en Smart, $1.500 en Next y $3.000 en One."}}, {"@type": "Question", "name": "¿Cómo se paga?", "acceptedAnswer": {"@type": "Answer", "text": "No somos un proveedor más, somos tus aliados estratégicos y buscamos la manera de adaptarnos a tu flujo de caja. La mensualidad se paga hasta el quinto día hábil de cada mes y, si pagas el año por anticipado, tienes descuento: 5 % en Start, 10 % en Smart, 12 % en Next y 15 % en One."}}, {"@type": "Question", "name": "¿Qué soporte incluye cada plan?", "acceptedAnswer": {"@type": "Answer", "text": "Soporte local antes, durante y después de implementar. Vienen incluidas 8 horas de soporte y capacitación en Start, 24 en Smart y 32 en Next y One."}}, {"@type": "Question", "name": "¿Y si necesito más horas de soporte?", "acceptedAnswer": {"@type": "Answer", "text": "La hora individual cuesta $40. También hay bolsas prepagadas: 50 horas a $36 cada una y 100 horas a $34 cada una. Tienes 1 año para usarlas desde la activación."}}, {"@type": "Question", "name": "¿Qué hacen con los datos que dejo en el formulario?", "acceptedAnswer": {"@type": "Answer", "text": "Los usamos solo para atender tu solicitud y darle seguimiento. No los vendemos. Todo el detalle está en nuestra Política de protección de datos."}}, {"@type": "Question", "name": "¿Puedo pedir que corrijan o borren mis datos?", "acceptedAnswer": {"@type": "Answer", "text": "Sí, y es gratis. Escríbenos a patricia.segarra@univiatech.com y te respondemos en máximo 10 días hábiles, como manda la Ley Orgánica de Protección de Datos Personales. También puedes retirar tu autorización cuando quieras, sin dar explicaciones."}}, {"@type": "Question", "name": "Si guardo datos de mis clientes en Univia, ¿quién responde por ellos?", "acceptedAnswer": {"@type": "Answer", "text": "Tu empresa decide para qué se usan esos datos, así que ante la ley es la responsable del tratamiento. Univia actúa como encargado: los trata solo para prestarte el servicio y según lo que acordemos en el contrato."}}, {"@type": "Question", "name": "¿La ley de protección de datos también aplica a las pymes?", "acceptedAnswer": {"@type": "Answer", "text": "Sí. La ley no exime a una empresa por ser pequeña: aplica a quien trate datos personales en Ecuador. Las multas se calculan sobre el volumen de negocio. Revisa tu caso con tu asesor legal; la autoridad encargada es la Superintendencia de Protección de Datos Personales."}}]}</script>
 <script type="application/ld+json">
 {
   "@context":"https://schema.org",
@@ -440,7 +452,9 @@ footer .fcontact{display:grid;gap:4px;text-align:right;min-width:0;overflow-wrap
   <div class="wrap nav">
     <a class="logo" href="#inicio" aria-label="Univia Tech, inicio"><span class="brand" role="img" aria-label="Univia Tech One System"></span></a>
     <ul>
+      <li><a target="_blank" rel="noopener" href="plataforma/">Plataforma</a></li>
       <li><a href="#como">Cómo trabajamos</a></li>
+      <li><a target="_blank" rel="noopener" href="planes/">Planes</a></li>
       <li><a href="#preguntas">Preguntas</a></li>
       <li><a href="#contacto">Contacto</a></li>
     </ul>
@@ -456,7 +470,9 @@ footer .fcontact{display:grid;gap:4px;text-align:right;min-width:0;overflow-wrap
   <nav class="mobile-menu" id="mobile-menu" aria-label="Menú" hidden>
     <div class="wrap">
       <ul>
+        <li><a target="_blank" rel="noopener" href="plataforma/">Plataforma</a></li>
         <li><a href="#como">Cómo trabajamos</a></li>
+        <li><a target="_blank" rel="noopener" href="planes/">Planes y precios</a></li>
         <li><a href="#preguntas">Preguntas frecuentes</a></li>
         <li><a href="#contacto">Contacto</a></li>
       </ul>
@@ -473,6 +489,7 @@ footer .fcontact{display:grid;gap:4px;text-align:right;min-width:0;overflow-wrap
         <span class="eyebrow">ERP para pymes ecuatorianas</span>
         <h1>Todo tu negocio, <em>todo bajo control.</em></h1>
         <p class="lead">Contabilidad, facturación electrónica, inventario y ventas en un solo sistema, alineado al SRI y con soporte local.</p>
+        <a class="oferta" target="_blank" rel="noopener" href="planes/"><span class="oferta-num">$0</span><span class="oferta-txt"><strong>de implementación con Univia Start</strong><small>Listo de inmediato · desde $79,99 al mes</small></span><span class="oferta-ir">Ver plan <span aria-hidden="true">→</span></span></a>
         <div class="ctas">
           <a class="btn btn-primary" href="#contacto">Agenda una demo</a>
           <a class="btn btn-ghost js-wa" href="#" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-wa"/></svg>Escríbenos por WhatsApp</a>
@@ -481,7 +498,7 @@ footer .fcontact{display:grid;gap:4px;text-align:right;min-width:0;overflow-wrap
           <li>Facturación electrónica</li>
           <li>Anexo ATS</li>
           <li>Inventario</li>
-          <li>Desde $79,99/mes</li>
+          <li>Soporte local</li>
         </ul>
       </div>
 
@@ -545,8 +562,8 @@ footer .fcontact{display:grid;gap:4px;text-align:right;min-width:0;overflow-wrap
       <h2>Lo que cambia cuando todo está bajo control.</h2>
       <div class="stats">
         <div class="stat"><b>+30%</b><span>de eficiencia operativa</span></div>
-        <div class="stat"><b>99%</b><span>menos errores administrativos</span></div>
-        <div class="stat"><b>99%</b><span>más ágil en el cierre financiero</span></div>
+        <div class="stat"><b>98%</b><span>menos errores administrativos</span></div>
+        <div class="stat"><b>98%</b><span>más ágil en el cierre financiero</span></div>
         <div class="stat"><b>−30%</b><span>de tiempo en la toma de decisiones</span></div>
       </div>
     </div>
@@ -596,7 +613,9 @@ footer .fcontact{display:grid;gap:4px;text-align:right;min-width:0;overflow-wrap
 
       <div class="plans" id="plans"></div>
 
-      </div>
+      <p class="ver-detalle"><a class="btn btn-ghost" target="_blank" rel="noopener" href="planes/">Ver la comparativa completa y las bolsas de horas</a></p>
+
+    </div>
   </section>
 
   <section class="block" id="preguntas" style="padding-top:0">
@@ -626,13 +645,13 @@ footer .fcontact{display:grid;gap:4px;text-align:right;min-width:0;overflow-wrap
           </div>
           <div class="faq-group">
             <h3>Implementación</h3>
-            <details><summary>¿Cuánto se demora la implementación?</summary><p>Start, 5 días laborables. Smart, 45. Next, 75. One, 120.</p></details>
+            <details><summary>¿Cuánto se demora la implementación?</summary><p>Con Univia Start empiezas de inmediato. Smart toma 5 días laborables, Next 30 y One 60.</p></details>
             <details><summary>¿Cómo es el proceso?</summary><p>Tiene tres pasos: analizamos tu operación, planificamos la solución según tus prioridades y luego implementamos, capacitamos a tu equipo y te seguimos acompañando.</p></details>
             <details><summary>¿Puedo pasar mi información desde Excel o desde otro sistema?</summary><p>En el diagnóstico revisamos qué información tienes, en qué estado está y definimos qué se carga y cómo. Ayuda mucho llegar con tus listados de clientes, proveedores y productos actualizados y sin duplicados.</p></details>
           </div>
           <div class="faq-group">
             <h3>Precios y soporte</h3>
-            <details><summary>¿Cuánto cuesta?</summary><p>Start cuesta $79,99 al mes, Smart $149,99, Next $274,99 y One $499,99. La implementación se paga una sola vez: $600, $1.500, $2.500 y $4.000, en ese mismo orden.</p></details>
+            <details><summary>¿Cuánto cuesta?</summary><p>Start cuesta $79,99 al mes, Smart $149,99, Next $274,99 y One $499,99. Univia Start no tiene costo de implementación; en los demás se paga una sola vez: $500 en Smart, $1.500 en Next y $3.000 en One.</p></details>
             <details><summary>¿Cómo se paga?</summary><p>No somos un proveedor más, somos tus aliados estratégicos y buscamos la manera de adaptarnos a tu flujo de caja. La mensualidad se paga hasta el quinto día hábil de cada mes y, si pagas el año por anticipado, tienes descuento: 5 % en Start, 10 % en Smart, 12 % en Next y 15 % en One.</p></details>
             <details><summary>¿Qué soporte incluye cada plan?</summary><p>Soporte local antes, durante y después de implementar. Vienen incluidas 8 horas de soporte y capacitación en Start, 24 en Smart y 32 en Next y One.</p></details>
             <details><summary>¿Y si necesito más horas de soporte?</summary><p>La hora individual cuesta $40. También hay bolsas prepagadas: 50 horas a $36 cada una y 100 horas a $34 cada una. Tienes 1 año para usarlas desde la activación.</p></details>
@@ -842,13 +861,13 @@ var BLOQUEADOS = ['2026-12-25', '2027-01-01', '2027-02-08', '2027-02-09', '2027-
 
     /* ===== Planes: cifras de la Presentación Univia Tech 2026 ===== */
     var PLANES=[
-      {id:'start', nombre:'Univia Start', para:'Micro y pequeñas empresas que quieren orden desde ya.', mensual:79.99, impl:600, dias:5, horas:8, dto:5,
+      {id:'start', nombre:'Univia Start', para:'Micro y pequeñas empresas que quieren orden desde ya.', mensual:79.99, impl:0, dias:0, horas:8, dto:5,
        modulos:['Contabilidad','Facturación electrónica','Anexo Transaccional ATS','Compras','Ventas','Inventario (stock)']},
-      {id:'smart', nombre:'Univia Smart', para:'Pymes que ya crecieron y necesitan decidir con datos.', mensual:149.99, impl:1500, dias:45, horas:24, dto:10, destacado:true,
+      {id:'smart', nombre:'Univia Smart', para:'Pymes que ya crecieron y necesitan decidir con datos.', mensual:149.99, impl:500, dias:5, horas:24, dto:10, destacado:true,
        hereda:'Todo Univia Start', modulos:['Gestión de activos fijos','Gestión de clientes (CRM)','Reportes en Power BI']},
-      {id:'next', nombre:'Univia Next', para:'Empresas en expansión (retail, comercio electrónico) con operación más compleja.', mensual:274.99, impl:2500, dias:75, horas:32, dto:12,
+      {id:'next', nombre:'Univia Next', para:'Empresas en expansión (retail, comercio electrónico) con operación más compleja.', mensual:274.99, impl:1500, dias:30, horas:32, dto:12,
        hereda:'Todo Univia Smart', modulos:['Punto de venta en línea y sin conexión','Tienda virtual','Integración con botón de pagos','Portal de clientes y proveedores','Manufactura y calidad del producto','Tickets de soporte','RR. HH.: reclutamiento, asistencia, turnos y evaluaciones','Nómina']},
-      {id:'one', nombre:'Univia One', para:'Sectores con procesos específicos o normativa propia: salud, educación, agricultura y más.', mensual:499.99, impl:4000, dias:120, horas:32, dto:15,
+      {id:'one', nombre:'Univia One', para:'Sectores con procesos específicos o normativa propia: salud, educación, agricultura y más.', mensual:499.99, impl:3000, dias:60, horas:32, dto:15,
        hereda:'Todo Univia Next', modulos:['Módulos verticales por industria','Proyectos','Integraciones por API REST','Webhooks y datos en tiempo real']}
     ];
 
@@ -876,7 +895,7 @@ var BLOQUEADOS = ['2026-12-25', '2027-01-01', '2027-02-08', '2027-02-09', '2027-
           pr.appendChild(el('small',null,'al año, con '+p.dto+' % de descuento (equivale a '+usd(anual(p)/12)+' al mes)'));
         }else{
           pr.appendChild(el('b',null,usd(p.mensual)));
-          pr.appendChild(el('small',null,'al mes + '+usd(p.impl)+' de implementación (pago único)'));
+          pr.appendChild(el('small',null,p.impl?'al mes + '+usd(p.impl)+' de implementación (pago único)':'al mes · sin costo de implementación'));
         }
         c.appendChild(pr);
         var ul=el('ul');
@@ -893,8 +912,8 @@ var BLOQUEADOS = ['2026-12-25', '2027-01-01', '2027-02-08', '2027-02-09', '2027-
     function renderTabla(){
       var rows=[
         ['Mensualidad',function(p){return usd(p.mensual);}],
-        ['Implementación (pago único)',function(p){return usd(p.impl);}],
-        ['Tiempo de implementación',function(p){return p.dias+' días laborables';}],
+        ['Implementación (pago único)',function(p){return p.impl?usd(p.impl):'Sin costo';}],
+        ['Tiempo de implementación',function(p){return p.dias?p.dias+' días laborables':'Inmediata';}],
         ['Soporte y capacitación incluidos',function(p){return p.horas+' horas';}],
         ['Descuento por pago anual',function(p){return p.dto+' %';}],
         ['Total anual con descuento',function(p){return usd(anual(p));}]
@@ -995,9 +1014,11 @@ var BLOQUEADOS = ['2026-12-25', '2027-01-01', '2027-02-08', '2027-02-09', '2027-
     var form=document.getElementById('lead'),via='wa',cargada=Date.now();
     var ORIGEN='';
     try{
-      var qs=new URLSearchParams(location.search),utm=['utm_source','utm_medium','utm_campaign','c'].map(function(k){return qs.get(k)?k.replace('utm_','')+'='+qs.get(k):'';}).filter(Boolean).join(' · ');
+      var qs=new URLSearchParams(location.search),utm=['utm_source','utm_medium','utm_campaign','utm_term','c','gclid'].map(function(k){return qs.get(k)?k.replace('utm_','')+'='+qs.get(k).slice(0,120):'';}).filter(Boolean).join(' · ');
       if(utm)sessionStorage.setItem('univia-origen',utm);
-      ORIGEN=(location.pathname.split('/').pop()||'inicio')+(sessionStorage.getItem('univia-origen')?' · '+sessionStorage.getItem('univia-origen'):'');
+      if(!sessionStorage.getItem('univia-entrada'))sessionStorage.setItem('univia-entrada',location.pathname);
+      var entrada=sessionStorage.getItem('univia-entrada')||'';
+      ORIGEN=(location.pathname.split('/').pop()||'inicio')+(sessionStorage.getItem('univia-origen')?' · '+sessionStorage.getItem('univia-origen'):'')+(entrada&&entrada!==location.pathname?' · entrada='+entrada:'');
     }catch(e){}
     form.querySelectorAll('button[type=submit]').forEach(function(b){b.addEventListener('click',function(){via=b.dataset.via;});});
     var KEY='univia-borrador';
