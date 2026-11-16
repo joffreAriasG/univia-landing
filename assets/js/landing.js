@@ -166,7 +166,7 @@
       if(utm)sessionStorage.setItem('univia-origen',utm);
       if(!sessionStorage.getItem('univia-entrada'))sessionStorage.setItem('univia-entrada',location.pathname);
       var entrada=sessionStorage.getItem('univia-entrada')||'';
-      ORIGEN=(location.pathname.split('/').pop()||'inicio')+(sessionStorage.getItem('univia-origen')?' · '+sessionStorage.getItem('univia-origen'):'')+(entrada&&entrada!==location.pathname?' · entrada='+entrada:'');
+      ORIGEN=(location.pathname.split('/').filter(Boolean).pop()||'inicio')+(sessionStorage.getItem('univia-origen')?' · '+sessionStorage.getItem('univia-origen'):'')+(entrada&&entrada!==location.pathname?' · entrada='+entrada:'');
     }catch(e){}
     form.querySelectorAll('button[type=submit]').forEach(function(b){b.addEventListener('click',function(){via=b.dataset.via;});});
     var KEY='univia-borrador';
