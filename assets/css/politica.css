@@ -1,0 +1,108 @@
+/* Estilos de la política de protección de datos. Fuente principal: este repositorio (antes: artefactos de claude.ai). */
+/* Blog Univia Tech · estilos compartidos por la portada del blog y los artículos.
+   Colores y tipografía del Manual de Marca (Space Grotesk; Alabaster, Eerie Black, Yellow Lime en detalles). */
+:root{
+  --ink:#262626; --bg:#e9e5dc; --surface:#ffffff; --line:#cfcbc2; --muted:#55544f;
+  --accent:#f5ff86; --accent-text:#262626; --btn-bg:#262626; --btn-fg:#f5ff86;
+  --band:#262626; --band-fg:#e9e5dc; --em-mark:#f5ff86;
+  --f:"Space Grotesk","Helvetica Neue","Segoe UI",system-ui,sans-serif;
+  --max:1120px; --r:14px;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ink:#e9e5dc; --bg:#1c1c1c; --surface:#262626; --line:#3a3a37; --muted:#bfbfbd;
+    --accent-text:#f5ff86; --btn-bg:#f5ff86; --btn-fg:#262626; --band:#111111; --em-mark:transparent;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --ink:#e9e5dc; --bg:#1c1c1c; --surface:#262626; --line:#3a3a37; --muted:#bfbfbd;
+  --accent-text:#f5ff86; --btn-bg:#f5ff86; --btn-fg:#262626; --band:#111111; --em-mark:transparent;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}*{transition:none!important}}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.65 var(--f);padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (max-width:600px){body{font-size:16px}}
+@media (min-width:1440px){body{font-size:18px}:root{--max:1240px}}
+img{max-width:100%}
+[hidden]{display:none!important}
+a{color:inherit}
+h1,h2,h3,h4{line-height:1.12;text-wrap:balance;margin:0}
+p{margin:0}
+:focus-visible{outline:3px solid var(--ink);outline-offset:3px;border-radius:6px}
+.wrap{max-width:var(--max);margin:0 auto;padding-left:max(16px, env(safe-area-inset-left,0px));padding-right:max(16px, env(safe-area-inset-right,0px))}
+.eyebrow{display:inline-flex;align-items:center;gap:.6em;font:500 .8rem var(--f);letter-spacing:.14em;text-transform:uppercase;color:var(--accent-text)}
+.eyebrow::before{content:"";width:.7em;height:.7em;border-radius:50%;background:var(--accent);box-shadow:0 0 0 1px var(--ink)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.55em;font:600 1rem var(--f);padding:.85em 1.4em;border-radius:999px;text-decoration:none;border:2px solid transparent;cursor:pointer;background:none;color:inherit;min-height:48px}
+.btn-primary{background:var(--btn-bg);color:var(--btn-fg)}
+.btn-ghost{border-color:var(--ink);color:var(--ink)}
+
+/* Logo oficial como máscara: toma el color del texto */
+.brand{display:block;aspect-ratio:750/244;background:var(--ink);
+  -webkit-mask:url("../../media/logo-mask.png") center/contain no-repeat;mask:url("../../media/logo-mask.png") center/contain no-repeat}
+
+/* Encabezado */
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:8;background:color-mix(in srgb, var(--bg) 92%, transparent);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:10px}
+.nav .logo{display:block;padding:4px 0}
+.nav .logo .brand{height:52px}
+.nav > ul{display:flex;gap:28px;list-style:none;margin:0;padding:0;font-weight:500;font-size:.95rem}
+.nav > ul a{text-decoration:none;color:var(--muted)}
+.nav > ul a:hover,.nav > ul a[aria-current]{color:var(--ink)}
+.nav > ul a[aria-current]{box-shadow:inset 0 -2px 0 var(--ink)}
+.nav-right{display:flex;align-items:center;gap:10px}
+.burger{display:none;width:46px;height:46px;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;place-items:center}
+.burger svg{width:22px;height:22px}
+.burger .x{display:none}
+.burger[aria-expanded="true"] .x{display:block}
+.burger[aria-expanded="true"] .bars{display:none}
+.mobile-menu{border-top:1px solid var(--line);background:var(--bg)}
+.mobile-menu .wrap{padding-block:4px 20px}
+.mobile-menu ul{list-style:none;margin:0;padding:0}
+.mobile-menu li a{display:block;padding:14px 0;font-size:1.15rem;font-weight:500;text-decoration:none;border-bottom:1px solid var(--line)}
+.mobile-menu .btn{margin-top:18px;width:100%}
+@media (max-width:860px){.nav > ul{display:none}.burger{display:grid}}
+@media (min-width:861px){.mobile-menu{display:none}}
+@media (max-width:520px){.nav .logo .brand{height:44px}.nav-right .btn{display:none}}
+
+/* Migas de pan */
+.crumbs{font-size:.85rem;color:var(--muted);padding-top:20px}
+.crumbs ol{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+.crumbs li+li::before{content:"/";margin-right:6px;opacity:.6}
+.crumbs a{text-decoration:none}
+.crumbs a:hover{text-decoration:underline}
+
+/* Portadas tipográficas de artículos (sin fotos: se reemplazan por imagen cuando la tengan) */
+.cover{position:relative;aspect-ratio:16/9;border-radius:var(--r);overflow:hidden;background:var(--band);color:var(--band-fg);display:flex;align-items:flex-end;padding:18px}
+.cover b{position:absolute;right:14px;top:6px;font:700 clamp(3rem,9vw,5.5rem)/1 var(--f);letter-spacing:-.04em;color:var(--accent)}
+.cover small{font:500 .72rem var(--f);letter-spacing:.14em;text-transform:uppercase;opacity:.85}
+.cover.alt{background:var(--surface);color:var(--ink);border:1px solid var(--line)}
+.cover.alt b{color:var(--ink)}
+.cover img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+
+/* Etiquetas */
+.tag{display:inline-block;font:600 .72rem var(--f);letter-spacing:.08em;text-transform:uppercase;padding:.3em .7em;border-radius:999px;border:1px solid var(--line);color:var(--muted)}
+.soon{display:inline-block;font:600 .72rem var(--f);padding:.3em .7em;border-radius:999px;background:var(--accent);color:#262626}
+
+/* Banda de llamado a la acción */
+.cta-band{background:var(--band);color:var(--band-fg)}
+.cta-band .wrap{padding-block:64px;display:grid;grid-template-columns:1.4fr auto;gap:32px;align-items:center}
+.cta-band h2{font-size:clamp(1.6rem,3vw,2.3rem);font-weight:500}
+.cta-band p{opacity:.85;margin-top:10px}
+.cta-band .acts{display:flex;flex-wrap:wrap;gap:12px}
+.cta-band .btn-primary{background:var(--accent);color:#262626}
+.cta-band .btn-ghost{border-color:var(--band-fg);color:var(--band-fg)}
+@media (max-width:760px){.cta-band .wrap{grid-template-columns:1fr;padding-block:48px}.cta-band .btn{width:100%}}
+
+footer{border-top:1px solid var(--line);padding-block:40px;color:var(--muted);font-size:.9rem}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:20px}
+footer .brand{height:60px}
+footer .fcontact{display:grid;gap:4px;text-align:right;overflow-wrap:anywhere}
+@media (max-width:600px){footer .wrap{flex-direction:column;align-items:flex-start}footer .fcontact{text-align:left}}
+
+
+.legal{max-width:68ch;padding-block:32px 72px}.legal h1{font-size:clamp(2rem,5vw,3rem);margin:14px 0 8px}.legal h2{font-size:1.35rem;margin-top:2em}.legal p,.legal li{color:var(--muted)}.legal > * + *{margin-top:1em}.legal ul{padding-left:1.2em}.legal table{border-collapse:collapse;width:100%;min-width:620px;font-size:.92rem}.legal th,.legal td{text-align:left;vertical-align:top;padding:12px 10px;border-bottom:1px solid var(--line)}.legal th{color:var(--ink)}.legal .tabla{overflow-x:auto}.legal .resumen{border:1px solid var(--line);border-radius:14px;padding:16px 18px}.legal mark.falta{background:var(--danger,#b3261e);color:#fff;padding:0 .3em}.legal a{color:inherit}.brand{-webkit-mask-image:url("../../media/logo-mask.png");mask-image:url("../../media/logo-mask.png")}
