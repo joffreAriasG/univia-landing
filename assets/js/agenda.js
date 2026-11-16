@@ -15,7 +15,21 @@ var HORAS = ['09:00', '10:00', '11:00', '14:00', '15:00', '16:00'];
 var DIAS = [1, 2, 3, 4, 5];
 var ANTICIPO = 1;
 var VENTANA = 30;
-var BLOQUEADOS = ['2026-12-25', '2027-01-01', '2027-02-08', '2027-02-09', '2027-03-26'];
+// Feriados nacionales de Ecuador ya trasladados (calendario 2027 del Viceministerio de Turismo, nov 2026).
+// Los que caen en fin de semana no hacen falta: DIAS ya excluye sábado y domingo.
+// Cada noviembre: agregar el año siguiente y quitar las fechas pasadas.
+var BLOQUEADOS = [
+  '2026-12-25',                                         // Navidad
+  '2027-01-01',                                         // Año Nuevo
+  '2027-02-08', '2027-02-09',                           // Carnaval
+  '2027-03-26',                                         // Viernes Santo
+  '2027-04-30',                                         // Día del Trabajo (del 1 may)
+  '2027-05-24',                                         // Batalla de Pichincha
+  '2027-08-09',                                         // Primer Grito de Independencia (del 10 ago)
+  '2027-10-08',                                         // Independencia de Guayaquil (del 9 oct)
+  '2027-11-01', '2027-11-02'                            // Difuntos e Independencia de Cuenca
+  // 2027-12-25 (Navidad) cae sábado
+];
 
 (function () {
   'use strict';
