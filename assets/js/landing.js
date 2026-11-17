@@ -198,13 +198,26 @@
       marca('f-consent',document.getElementById('f-consent').checked?'':'Necesitamos tu autorización para poder atenderte');
       return ok;
     }
+    // CTO-06: si el ERP rechaza la cita (el horario se ocupó entre que lo eligió y envió), el lead se reenvía sin
+    // reserva para no perderlo, se avisa y el calendario vuelve a pedir horarios.
+    var ultimoLead=null;
+    document.addEventListener('univia:lead-resultado',function(e){
+      var r=e.detail||{},d=ultimoLead,txt=document.getElementById('result-text');
+      if(!d||!d.cita)return;
+      if(r.ok){if(PRUEBA)txt.textContent+=' Horario reservado en el ERP.';return;}
+      if(!/horario/i.test(r.error||''))return;
+      var sinCita={};for(var k in d)sinCita[k]=d[k];sinCita.cita='';ultimoLead=null;
+      if(window.UniviaLeads)window.UniviaLeads.enviar(sinCita);
+      txt.textContent='Ese horario se acaba de ocupar. Guardamos tu solicitud y te contactamos para coordinar otra hora.';
+      if(window.__agenda&&window.__agenda.recargar)window.__agenda.recargar();
+    });
     form.addEventListener('submit',function(e){
       e.preventDefault();
       if(!validar()){var bad=form.querySelector('.bad input, .bad select');if(bad)bad.focus();return;}
       if(form.elements.sitio_web.value||Date.now()-cargada<3000){document.getElementById('result-text').textContent='Recibimos tu solicitud.';document.getElementById('result').hidden=false;return;}
       var g=function(k){return form.elements[k].value.trim();};
       var cita=window.__agenda?window.__agenda.valor():null;
-      var lineas=['Hola, quiero agendar una demo de Univia Tech.','','Fecha que prefiero: '+(cita?cita.texto:'Quiero coordinarla con ustedes'),'Nombre: '+g('nombre'),'Empresa: '+g('empresa'),'Celular: '+g('telefono'),'Correo: '+g('correo')];
+      var lineas=['Hola, quiero agendar una demo de Univia Tech.','',(cita&&cita.reserva?'Demo reservada en el calendario: ':'Fecha que prefiero: ')+(cita?cita.texto:'Quiero coordinarla con ustedes'),'Nombre: '+g('nombre'),'Empresa: '+g('empresa'),'Celular: '+g('telefono'),'Correo: '+g('correo')];
       if(g('ciudad'))lineas.push('Ciudad: '+g('ciudad'));
       lineas.push('Plan de interés: '+g('plan'));
       if(g('mensaje'))lineas.push('','Lo que quiero resolver: '+g('mensaje'));
@@ -219,7 +232,9 @@
       if(PRUEBA)document.getElementById('result-text').textContent='Modo prueba: no se abrió '+(via==='wa'?'WhatsApp':'el correo')+'. El lead se envió al CRM marcado como PRUEBA.';
       document.getElementById('result-msg').textContent=msg;
       res.hidden=false;
-      try{document.dispatchEvent(new CustomEvent('univia:lead',{detail:{fecha_demo:cita?cita.valor:'',consentimiento:new Date().toISOString(),origen:ORIGEN,via:via,plan:g('plan'),nombre:g('nombre'),empresa:g('empresa'),telefono:g('telefono'),correo:g('correo'),ciudad:g('ciudad'),mensaje:(PRUEBA?'[PRUEBA] ':'')+g('mensaje')}}));}catch(e){}
+      // CTO-06: con horario del ERP va `cita` (se reserva); fecha_demo queda como texto para el lead.
+      ultimoLead={fecha_demo:cita?cita.valor:'',cita:cita&&cita.reserva?cita.valor:'',consentimiento:new Date().toISOString(),origen:ORIGEN,via:via,plan:g('plan'),nombre:g('nombre'),empresa:g('empresa'),telefono:g('telefono'),correo:g('correo'),ciudad:g('ciudad'),mensaje:(PRUEBA?'[PRUEBA] ':'')+g('mensaje')};
+      try{document.dispatchEvent(new CustomEvent('univia:lead',{detail:ultimoLead}));}catch(e){}
       if(PRUEBA){}
       else if(via==='wa'){var w=window.open(url,'_blank','noopener');if(!w){var a=document.createElement('a');a.href=url;a.target='_blank';a.rel='noopener';document.body.appendChild(a);a.click();a.remove();}}
       else{window.location.href=url;}

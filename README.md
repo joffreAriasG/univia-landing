@@ -55,6 +55,15 @@ WhatsApp ni el correo y el lead llega al CRM con origen `PRUEBA · …` y el men
 Dura toda la sesión del navegador; `?prueba=0` lo quita. Los botones sueltos de WhatsApp siguen abriendo el chat real
 (no envían nada solos).
 
+## Calendario de la demo
+
+`assets/js/agenda.js` pide los horarios libres al ERP del canal (citas de ERPNext en QA: horarios, agentes,
+feriados y lo ya reservado). Al enviar, el horario queda reservado como cita del lead; si se ocupó justo antes, el lead
+se guarda igual sin reserva y el visitante lo ve. Si el ERP no responde en 3,5 s, el calendario usa los horarios y
+feriados fijos de `agenda.js` (solo preferencia, como antes). En modo prueba la reserva es real: borrarla en QA.
+
+`lead.js` se sirve con caché de un año: cuando cambie en la plataforma, subir la versión `?v=` en las 12 páginas.
+
 ## Cómo hacer un cambio
 
 1. Crea una rama desde `main`: `git switch -c mi-cambio`.
