@@ -66,7 +66,12 @@ feriados y lo ya reservado). Al enviar, el horario queda reservado como cita del
 se guarda igual sin reserva y el visitante lo ve. Si el ERP no responde en 3,5 s, el calendario usa los horarios y
 feriados fijos de `agenda.js` (solo preferencia, como antes). En modo prueba la reserva es real: borrarla en QA.
 
-`lead.js` se sirve con caché de un año: cuando cambie en la plataforma, subir la versión `?v=` en las 12 páginas.
+Todos los scripts llevan versión en la URL (`?v=AAAA-MM-DD`): GitHub Pages guarda los JS 10 minutos y QA sirve `lead.js`
+con caché de un año, así que sin versión un navegador puede juntar el HTML nuevo con un JS viejo. Cuando cambie un
+script (o `lead.js` en la plataforma), subir la versión en todas las páginas que lo cargan.
+
+**Código de solicitud (CTO-04):** cada envío genera `UT-XXXX` en el navegador; va en el mensaje de WhatsApp
+("Solicitud UT-XXXX"), en el lead del CRM (campo *Código de solicitud*) y en los correos de confirmación.
 
 ## Cómo hacer un cambio
 

@@ -227,7 +227,7 @@
         document.getElementById('result-msg').hidden=true;document.getElementById('result-acciones').hidden=true;
         try{localStorage.removeItem(KEY);}catch(x){}
         if(e.ocupado)return; // ya se dijo que el horario se ocupó y que lo coordinamos
-        txtRes().textContent='Listo, '+e.nombre+': recibimos tu solicitud. '+(reserva
+        txtRes().textContent='Listo, '+e.nombre+': recibimos tu solicitud '+e.codigo+'. '+(reserva
           ? 'Tu demo quedó reservada para el '+e.cita.texto+'. Te enviamos la confirmación a '+e.correo+'.'
           : 'Te escribimos por WhatsApp o correo para coordinar tu demo. Te enviamos una confirmación a '+e.correo+'.')
           +(PRUEBA?' (Modo prueba: el lead llegó al CRM marcado como PRUEBA.)':'');
@@ -244,6 +244,14 @@
       document.getElementById('result-msg').hidden=false;document.getElementById('result-acciones').hidden=false;
       var wa=document.getElementById('result-wa');wa.hidden=false;wa.href=waBase+'?text='+encodeURIComponent(e.msg);
     }
+    // CTO-04: código corto para encontrar el lead desde el chat. Se genera aquí (no se espera al CRM: abrir WhatsApp
+    // después de una espera hace que el navegador bloquee la ventana). Sin 0/O ni 1/I/L para dictarlo sin confusión.
+    function nuevoCodigo(){
+      var abc='23456789ABCDEFGHJKMNPQRSTUVWXYZ',n=new Uint32Array(4),s='';
+      try{crypto.getRandomValues(n);}catch(x){for(var i=0;i<4;i++)n[i]=Math.floor(Math.random()*1e9);}
+      for(var j=0;j<4;j++)s+=abc[n[j]%abc.length];
+      return 'UT-'+s;
+    }
     form.addEventListener('submit',function(e){
       e.preventDefault();
       if(espera)return; // ya hay un envío esperando respuesta
@@ -251,7 +259,8 @@
       if(form.elements.sitio_web.value||Date.now()-cargada<3000){txtRes().textContent='Recibimos tu solicitud.';document.getElementById('result').hidden=false;return;}
       var g=function(k){return form.elements[k].value.trim();};
       var cita=window.__agenda?window.__agenda.valor():null;
-      var lineas=['Hola, quiero agendar una demo de Univia Tech.','',(cita&&cita.reserva?'Demo reservada en el calendario: ':'Fecha que prefiero: ')+(cita?cita.texto:'Quiero coordinarla con ustedes'),'Nombre: '+g('nombre'),'Empresa: '+g('empresa'),'Celular: '+g('telefono'),'Correo: '+g('correo')];
+      var codigo=nuevoCodigo();
+      var lineas=['Hola, quiero agendar una demo de Univia Tech.','Solicitud '+codigo,'',(cita&&cita.reserva?'Demo reservada en el calendario: ':'Fecha que prefiero: ')+(cita?cita.texto:'Quiero coordinarla con ustedes'),'Nombre: '+g('nombre'),'Empresa: '+g('empresa'),'Celular: '+g('telefono'),'Correo: '+g('correo')];
       if(g('ciudad'))lineas.push('Ciudad: '+g('ciudad'));
       lineas.push('Plan de interés: '+g('plan'));
       if(g('mensaje'))lineas.push('','Lo que quiero resolver: '+g('mensaje'));
@@ -262,10 +271,10 @@
       document.getElementById('copy-msg').onclick=function(){copiar(msg,'Mensaje copiado');};
       document.getElementById('result-wa').hidden=true;
       // CTO-06: con horario del ERP va `cita` (se reserva); fecha_demo queda como texto para el lead.
-      ultimoLead={fecha_demo:cita?cita.valor:'',cita:cita&&cita.reserva?cita.valor:'',consentimiento:new Date().toISOString(),origen:ORIGEN,via:via,plan:g('plan'),nombre:g('nombre'),empresa:g('empresa'),telefono:g('telefono'),correo:g('correo'),ciudad:g('ciudad'),mensaje:(PRUEBA?'[PRUEBA] ':'')+g('mensaje')};
+      ultimoLead={codigo:codigo,fecha_demo:cita?cita.valor:'',cita:cita&&cita.reserva?cita.valor:'',consentimiento:new Date().toISOString(),origen:ORIGEN,via:via,plan:g('plan'),nombre:g('nombre'),empresa:g('empresa'),telefono:g('telefono'),correo:g('correo'),ciudad:g('ciudad'),mensaje:(PRUEBA?'[PRUEBA] ':'')+g('mensaje')};
       if(via==='formulario'){
         // CTO-03: solo al CRM. Sin lead.js (bloqueado o caído) o sin respuesta en 12 s, se ofrece el respaldo.
-        espera={nombre:g('nombre').split(' ')[0],correo:g('correo'),cita:cita,msg:msg,ocupado:false};
+        espera={nombre:g('nombre').split(' ')[0],correo:g('correo'),cita:cita,msg:msg,ocupado:false,codigo:codigo};
         espera.reloj=setTimeout(function(){if(espera)terminarFormulario({ok:false,error:'sin respuesta'});},12000);
         botones(false);
         txtRes().textContent='Enviando tu solicitud…';
