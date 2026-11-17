@@ -51,7 +51,7 @@ def revisar(archivo: Path):
 
 
 for f in sorted(RAIZ.glob("**/index.html")) + sorted(RAIZ.glob("assets/**/*.css")):
-    if ".git" not in f.parts:
+    if ".git" not in f.parts and "dist" not in f.parts:  # dist/: versión de producción (build_produccion.py)
         revisar(f)
 
 for a in sorted(set(avisos)):

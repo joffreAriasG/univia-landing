@@ -73,6 +73,17 @@ script (o `lead.js` en la plataforma), subir la versión en todas las páginas q
 **Código de solicitud (CTO-04):** cada envío genera `UT-XXXX` en el navegador; va en el mensaje de WhatsApp
 ("Solicitud UT-XXXX"), en el lead del CRM (campo *Código de solicitud*) y en los correos de confirmación.
 
+## Dos sitios desde este repo (WEB-01)
+
+| Sitio | Hosting | Leads a | Quién lo ve |
+|---|---|---|---|
+| https://landing.univiatech.com | GitHub Pages, el repo tal cual | QA (`qa.univiatech.com`) | público, `noindex` (pruebas) |
+| https://univiatech.com y www | Cloudflare Pages, `dist/` | producción (`erp.univiatech.com`) | solo los correos autorizados en Cloudflare Access, hasta el lanzamiento |
+
+`scripts/build_produccion.py` arma `dist/` con un solo cambio: el ERP de QA pasa a ser el de producción en las 12
+páginas. Falla si queda alguna referencia a QA. En Cloudflare Pages: comando `python3 scripts/build_produccion.py`,
+carpeta de salida `dist`. Cada push a `main` publica los dos.
+
 ## Cómo hacer un cambio
 
 1. Crea una rama desde `main`: `git switch -c mi-cambio`.
