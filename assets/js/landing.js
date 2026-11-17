@@ -148,7 +148,7 @@
       });
     });
 
-    /* Formulario: arma el mensaje y abre WhatsApp o el correo */
+    /* Formulario: arma el mensaje y abre WhatsApp, o solo lo envía al CRM (CTO-03) */
     document.querySelectorAll('[data-bolsa]').forEach(function(b){b.addEventListener('click',function(){
       var s=document.getElementById('f-plan'),x='Horas de soporte adicionales',m=document.getElementById('f-msg');
       if(![].some.call(s.options,function(o){return o.value===x;}))s.add(new Option(x));
@@ -163,7 +163,7 @@
       var entrada=sessionStorage.getItem('univia-entrada')||'';
       ORIGEN=(location.pathname.split('/').filter(Boolean).pop()||'inicio')+(sessionStorage.getItem('univia-origen')?' · '+sessionStorage.getItem('univia-origen'):'')+(entrada&&entrada!==location.pathname?' · entrada='+entrada:'');
     }catch(e){}
-    /* Modo prueba: ?prueba=1 (dura la sesión; ?prueba=0 lo quita). No abre WhatsApp ni correo y el lead llega al CRM marcado como PRUEBA. */
+    /* Modo prueba: ?prueba=1 (dura la sesión; ?prueba=0 lo quita). No abre WhatsApp y el lead llega al CRM marcado como PRUEBA. */
     var PRUEBA=false;
     try{
       var qp=new URLSearchParams(location.search).get('prueba');
@@ -175,7 +175,7 @@
       ORIGEN='PRUEBA · '+ORIGEN;
       var avisoPrueba=document.createElement('div');
       avisoPrueba.setAttribute('role','status');
-      avisoPrueba.textContent='Modo prueba: el formulario no abre WhatsApp ni correo y el lead llega al CRM marcado como PRUEBA. Para salir: ?prueba=0';
+      avisoPrueba.textContent='Modo prueba: el formulario no abre WhatsApp y el lead llega al CRM marcado como PRUEBA. Para salir: ?prueba=0';
       avisoPrueba.style.cssText='position:fixed;left:12px;bottom:12px;z-index:99;max-width:min(380px,calc(100vw - 24px));background:#a1281f;color:#fff;padding:10px 14px;border-radius:12px;font:500 .85rem/1.4 system-ui,sans-serif';
       document.body.appendChild(avisoPrueba);
     }
@@ -198,23 +198,57 @@
       marca('f-consent',document.getElementById('f-consent').checked?'':'Necesitamos tu autorización para poder atenderte');
       return ok;
     }
+    // Resultado del envío al CRM (lead.js responde con univia:lead-resultado).
     // CTO-06: si el ERP rechaza la cita (el horario se ocupó entre que lo eligió y envió), el lead se reenvía sin
     // reserva para no perderlo, se avisa y el calendario vuelve a pedir horarios.
-    var ultimoLead=null;
+    // CTO-03: con "Solo enviar solicitud" la confirmación (o el respaldo si falla) se muestra al llegar la respuesta.
+    var ultimoLead=null,espera=null;
+    var txtRes=function(){return document.getElementById('result-text');};
+    var botones=function(on){form.querySelectorAll('button[type=submit]').forEach(function(b){b.disabled=!on;});};
     document.addEventListener('univia:lead-resultado',function(e){
-      var r=e.detail||{},d=ultimoLead,txt=document.getElementById('result-text');
-      if(!d||!d.cita)return;
-      if(r.ok){if(PRUEBA)txt.textContent+=' Horario reservado en el ERP.';return;}
-      if(!/horario/i.test(r.error||''))return;
-      var sinCita={};for(var k in d)sinCita[k]=d[k];sinCita.cita='';ultimoLead=null;
-      if(window.UniviaLeads)window.UniviaLeads.enviar(sinCita);
-      txt.textContent='Ese horario se acaba de ocupar. Guardamos tu solicitud y te contactamos para coordinar otra hora.';
-      if(window.__agenda&&window.__agenda.recargar)window.__agenda.recargar();
+      var r=e.detail||{},d=ultimoLead;
+      if(d&&d.cita&&!r.ok&&/horario/i.test(r.error||'')){
+        var sinCita={};for(var k in d)sinCita[k]=d[k];sinCita.cita='';ultimoLead=sinCita;
+        if(espera)espera.ocupado=true;
+        if(window.UniviaLeads)window.UniviaLeads.enviar(sinCita).then(function(r2){document.dispatchEvent(new CustomEvent('univia:lead-resultado',{detail:r2}));});
+        txtRes().textContent='Ese horario se acaba de ocupar. Guardamos tu solicitud y te contactamos para coordinar otra hora.';
+        if(window.__agenda&&window.__agenda.recargar)window.__agenda.recargar();
+        return;
+      }
+      if(espera){terminarFormulario(r);return;}
+      if(d&&d.cita&&r.ok&&PRUEBA)txtRes().textContent+=' Horario reservado en el ERP.';
     });
+    function terminarFormulario(r){
+      var e=espera;espera=null;clearTimeout(e.reloj);botones(true);
+      var res=document.getElementById('result');res.hidden=false;
+      var reserva=e.cita&&e.cita.reserva&&!e.ocupado;
+      if(r.ok){
+        res.classList.remove('falla');
+        document.getElementById('result-msg').hidden=true;document.getElementById('result-acciones').hidden=true;
+        try{localStorage.removeItem(KEY);}catch(x){}
+        if(e.ocupado)return; // ya se dijo que el horario se ocupó y que lo coordinamos
+        txtRes().textContent='Listo, '+e.nombre+': recibimos tu solicitud. '+(reserva
+          ? 'Tu demo quedó reservada para el '+e.cita.texto+'. Te enviamos la confirmación a '+e.correo+'.'
+          : 'Te escribimos por WhatsApp o correo para coordinar tu demo. Te enviamos una confirmación a '+e.correo+'.')
+          +(PRUEBA?' (Modo prueba: el lead llegó al CRM marcado como PRUEBA.)':'');
+        return;
+      }
+      // Respaldo: el CRM no respondió o rechazó el envío. El mensaje queda listo para WhatsApp o para copiar.
+      res.classList.add('falla');
+      // Mensaje del CRM pensado para el visitante (p. ej. celular inválido): se muestra para que lo corrija. Los errores
+      // técnicos (red, CORS, sin respuesta) no se muestran.
+      var delCrm=r.error&&!/^(sin respuesta|TypeError|Error \d|lead\.js|SyntaxError|AbortError)/.test(r.error);
+      txtRes().textContent=delCrm
+        ? 'No pudimos enviar tu solicitud: '+r.error+' Corrígelo y vuelve a enviarla, o escríbenos por WhatsApp con este mensaje.'
+        : 'No pudimos enviar tu solicitud. Escríbenos por WhatsApp con este mensaje o cópialo y envíalo a '+CONTACTO.correo+'.';
+      document.getElementById('result-msg').hidden=false;document.getElementById('result-acciones').hidden=false;
+      var wa=document.getElementById('result-wa');wa.hidden=false;wa.href=waBase+'?text='+encodeURIComponent(e.msg);
+    }
     form.addEventListener('submit',function(e){
       e.preventDefault();
+      if(espera)return; // ya hay un envío esperando respuesta
       if(!validar()){var bad=form.querySelector('.bad input, .bad select');if(bad)bad.focus();return;}
-      if(form.elements.sitio_web.value||Date.now()-cargada<3000){document.getElementById('result-text').textContent='Recibimos tu solicitud.';document.getElementById('result').hidden=false;return;}
+      if(form.elements.sitio_web.value||Date.now()-cargada<3000){txtRes().textContent='Recibimos tu solicitud.';document.getElementById('result').hidden=false;return;}
       var g=function(k){return form.elements[k].value.trim();};
       var cita=window.__agenda?window.__agenda.valor():null;
       var lineas=['Hola, quiero agendar una demo de Univia Tech.','',(cita&&cita.reserva?'Demo reservada en el calendario: ':'Fecha que prefiero: ')+(cita?cita.texto:'Quiero coordinarla con ustedes'),'Nombre: '+g('nombre'),'Empresa: '+g('empresa'),'Celular: '+g('telefono'),'Correo: '+g('correo')];
@@ -222,23 +256,33 @@
       lineas.push('Plan de interés: '+g('plan'));
       if(g('mensaje'))lineas.push('','Lo que quiero resolver: '+g('mensaje'));
       var msg=lineas.join('\n');
-      var url=via==='wa'
-        ? waBase+'?text='+encodeURIComponent(msg)
-        : 'mailto:'+CONTACTO.correo+'?subject='+encodeURIComponent('Demo Univia Tech · '+g('empresa'))+'&body='+encodeURIComponent(msg);
       var res=document.getElementById('result');
-      document.getElementById('result-text').textContent= via==='wa'
-        ? 'Abrimos WhatsApp con tu mensaje listo. Solo falta que lo envíes desde ahí. Si no se abrió, copia el mensaje y escríbenos al '+CONTACTO.whatsappVisible+'.'
-        : 'Abrimos tu correo con el mensaje listo. Solo falta que lo envíes. Si no se abrió, copia el mensaje y escríbenos a '+CONTACTO.correo+'.';
-      if(PRUEBA)document.getElementById('result-text').textContent='Modo prueba: no se abrió '+(via==='wa'?'WhatsApp':'el correo')+'. El lead se envió al CRM marcado como PRUEBA.';
+      res.classList.remove('falla');
       document.getElementById('result-msg').textContent=msg;
-      res.hidden=false;
+      document.getElementById('copy-msg').onclick=function(){copiar(msg,'Mensaje copiado');};
+      document.getElementById('result-wa').hidden=true;
       // CTO-06: con horario del ERP va `cita` (se reserva); fecha_demo queda como texto para el lead.
       ultimoLead={fecha_demo:cita?cita.valor:'',cita:cita&&cita.reserva?cita.valor:'',consentimiento:new Date().toISOString(),origen:ORIGEN,via:via,plan:g('plan'),nombre:g('nombre'),empresa:g('empresa'),telefono:g('telefono'),correo:g('correo'),ciudad:g('ciudad'),mensaje:(PRUEBA?'[PRUEBA] ':'')+g('mensaje')};
-      try{document.dispatchEvent(new CustomEvent('univia:lead',{detail:ultimoLead}));}catch(e){}
-      if(PRUEBA){}
-      else if(via==='wa'){var w=window.open(url,'_blank','noopener');if(!w){var a=document.createElement('a');a.href=url;a.target='_blank';a.rel='noopener';document.body.appendChild(a);a.click();a.remove();}}
-      else{window.location.href=url;}
-      document.getElementById('copy-msg').onclick=function(){copiar(msg,'Mensaje copiado');};
+      if(via==='formulario'){
+        // CTO-03: solo al CRM. Sin lead.js (bloqueado o caído) o sin respuesta en 12 s, se ofrece el respaldo.
+        espera={nombre:g('nombre').split(' ')[0],correo:g('correo'),cita:cita,msg:msg,ocupado:false};
+        espera.reloj=setTimeout(function(){if(espera)terminarFormulario({ok:false,error:'sin respuesta'});},12000);
+        botones(false);
+        txtRes().textContent='Enviando tu solicitud…';
+        document.getElementById('result-msg').hidden=true;document.getElementById('result-acciones').hidden=true;
+        res.hidden=false;
+        if(!window.UniviaLeads){terminarFormulario({ok:false,error:'sin respuesta'});return;}
+        try{document.dispatchEvent(new CustomEvent('univia:lead',{detail:ultimoLead}));}catch(x){terminarFormulario({ok:false,error:'sin respuesta'});}
+        return;
+      }
+      var url=waBase+'?text='+encodeURIComponent(msg);
+      txtRes().textContent=PRUEBA
+        ? 'Modo prueba: no se abrió WhatsApp. El lead se envió al CRM marcado como PRUEBA.'
+        : 'Abrimos WhatsApp con tu mensaje listo. Solo falta que lo envíes desde ahí. Si no se abrió, copia el mensaje y escríbenos al '+CONTACTO.whatsappVisible+'.';
+      document.getElementById('result-msg').hidden=false;document.getElementById('result-acciones').hidden=false;
+      res.hidden=false;
+      try{document.dispatchEvent(new CustomEvent('univia:lead',{detail:ultimoLead}));}catch(x){}
+      if(!PRUEBA){var w=window.open(url,'_blank','noopener');if(!w){var a=document.createElement('a');a.href=url;a.target='_blank';a.rel='noopener';document.body.appendChild(a);a.click();a.remove();}}
     });
   }catch(e){show(e.message);}
 })();

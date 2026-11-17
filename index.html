@@ -347,13 +347,13 @@
         <div class="field full consent"><label class="check"><input type="checkbox" id="f-consent" name="consent" required><span>Autorizo a Univia Tech a usar estos datos para atender mi solicitud, como explica la <a href="politica-de-datos/">Política de protección de datos</a>, incluidos los proveedores que allí se indican.</span></label><span class="err"></span></div>
         <div class="form-actions">
           <button type="submit" class="btn btn-primary" data-via="wa"><svg aria-hidden="true"><use href="#i-wa"/></svg>Enviar por WhatsApp</button>
-          <button type="submit" class="btn btn-ghost" data-via="mail"><svg aria-hidden="true"><use href="#i-mail"/></svg>Enviar por correo</button>
+          <button type="submit" class="btn btn-ghost" data-via="formulario"><svg aria-hidden="true"><use href="#i-mail"/></svg>Solo enviar solicitud</button>
         </div>
         <p class="form-note">Puedes pedir que corrijamos o eliminemos tus datos cuando quieras.</p>
         <div class="result" id="result" hidden>
           <span id="result-text"></span>
           <pre id="result-msg"></pre>
-          <div><button type="button" class="mini" id="copy-msg">Copiar mensaje</button></div>
+          <div id="result-acciones"><button type="button" class="mini" id="copy-msg">Copiar mensaje</button> <a class="mini solid" id="result-wa" target="_blank" rel="noopener" hidden>Enviar por WhatsApp</a></div>
         </div>
       </div>
       </form>

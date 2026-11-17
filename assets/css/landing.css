@@ -362,6 +362,9 @@ form.lead{padding:28px;border:1px solid var(--line);border-radius:18px;backgroun
 @media (max-width:560px){.conds{padding:22px}.conds ul{grid-template-columns:1fr;gap:12px}.conds li{display:flex;align-items:center;gap:12px}.conds li::before{flex:none;margin:0}.conds-letra{grid-template-columns:1fr}}
 .form-note{grid-column:1/-1;font-size:.8rem;color:var(--muted)}
 .result{grid-column:1/-1;padding:16px;border-radius:12px;background:var(--bg);font-size:.92rem;display:grid;gap:10px}
+.result [hidden]{display:none}
+.result.falla{border:1px solid #a1281f}
+#result-acciones{display:flex;flex-wrap:wrap;gap:8px}
 .result pre{margin:0;white-space:pre-wrap;font:400 .85rem var(--f-body);color:var(--muted);max-height:180px;overflow:auto}
 @media (max-width:900px){.contact{grid-template-columns:1fr}}
 @media (max-width:560px){form.lead{grid-template-columns:1fr;padding:20px}}

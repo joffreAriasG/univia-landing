@@ -49,9 +49,13 @@ datos personales y nunca en modo prueba.
 
 ## Probar el formulario
 
-El WhatsApp y el correo del formulario son los reales. Para probar sin escribirles, abre el sitio con
+El formulario tiene dos botones: **Enviar por WhatsApp** (abre el chat con el mensaje listo y además manda el lead
+al CRM) y **Solo enviar solicitud** (CTO-03: solo al CRM; espera su respuesta y confirma, o si el CRM no responde en
+12 s ofrece WhatsApp o copiar el mensaje). El correo de contacto sigue en la tarjeta de contacto.
+
+El WhatsApp del formulario es el real. Para probar sin escribirle, abre el sitio con
 `?prueba=1` (ej. https://landing.univiatech.com/?prueba=1): aparece un aviso rojo, el formulario no abre
-WhatsApp ni el correo y el lead llega al CRM con origen `PRUEBA · …` y el mensaje con `[PRUEBA]`.
+WhatsApp y el lead llega al CRM con origen `PRUEBA · …` y el mensaje con `[PRUEBA]`.
 Dura toda la sesión del navegador; `?prueba=0` lo quita. Los botones sueltos de WhatsApp siguen abriendo el chat real
 (no envían nada solos).
 
