@@ -80,9 +80,27 @@ script (o `lead.js` en la plataforma), subir la versión en todas las páginas q
 | https://landing.univiatech.com | GitHub Pages, el repo tal cual | QA (`qa.univiatech.com`) | público, `noindex` (pruebas) |
 | https://univiatech.com y www | Cloudflare Pages, `dist/` | producción (`erp.univiatech.com`) | solo los correos autorizados en Cloudflare Access, hasta el lanzamiento |
 
-`scripts/build_produccion.py` arma `dist/` con un solo cambio: el ERP de QA pasa a ser el de producción en las 12
-páginas. Falla si queda alguna referencia a QA. En Cloudflare Pages: comando `python3 scripts/build_produccion.py`,
-carpeta de salida `dist`. Cada push a `main` publica los dos.
+`scripts/build_produccion.py` arma `dist/`: el ERP de QA pasa a ser el de producción y `landing.univiatech.com` pasa
+a `univiatech.com` (canonical, og y datos estructurados) en las 12 páginas. Falla si queda alguna referencia de prueba.
+En Cloudflare Pages: comando `python3 scripts/build_produccion.py`, carpeta de salida `dist`. Cada push a `main` publica
+los dos.
+
+### Lanzamiento de univiatech.com (#15)
+
+Con la variable de entorno **`LANZAMIENTO=1`** en Cloudflare Pages (Settings → Variables and secrets, entorno
+Production), el build quita el `noindex` y genera `robots.txt` y `sitemap.xml`. Sin ella, el sitio sigue sin indexarse.
+
+Pasos, en orden:
+1. Política de datos completa (#1: razón social, RUC y domicilio legal).
+2. En erp: cuenta de correo de salida (ENV-02) para las confirmaciones; agenda (Appointment Booking Settings) si se
+   quiere reservar desde el calendario (si no, el calendario usa los horarios fijos de `agenda.js`).
+3. Opcional: IDs de analítica en `seguimiento.js`.
+4. Cloudflare Pages: `LANZAMIENTO=1` y volver a desplegar (Deployments → Retry deployment).
+5. Cloudflare Zero Trust: quitar la aplicación de Access "Landing univiatech (privada)" (univiatech.com y www).
+6. Comprobar desde una ventana privada: carga sin login, `robots.txt`, `sitemap.xml`, un lead de prueba con
+   `?prueba=1` llega a erp.
+
+landing.univiatech.com sigue como copia de pruebas (`noindex`, leads a QA).
 
 ## Cómo hacer un cambio
 
